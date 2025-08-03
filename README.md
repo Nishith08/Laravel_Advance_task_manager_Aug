@@ -1,180 +1,247 @@
-Task Manager with Reminders & Activity Logs
-This is a Laravel 10+ web application for managing tasks, complete with user authentication, activity logging, and email reminders via queued jobs.
+Here’s your complete and beautifully **formatted `README.md`** file with the newly added **"Setup Instructions"** section from Canvas, integrated in a professional and clean layout:
 
-Features
-Authentication & Roles:
+---
 
-Built with Laravel Breeze for secure login/registration.
+````markdown
+# ✅ Task Manager with Reminders & Activity Logs
 
-Supports two roles: Admin and User.
+A Laravel 10+ web application to manage tasks with user authentication, activity logs, and email reminders using queued jobs.
 
-Admins can view all users and their tasks.
+---
 
-Users can only manage their own tasks.
+## 🚀 Features
 
-Task Management:
+### 🔐 Authentication & Roles
+- Built with **Laravel Breeze**
+- Roles: **Admin** and **User**
+- Admins can view all users and tasks
+- Users can manage **only their own tasks**
 
-CRUD operations for tasks (Create, Read, Update, Delete).
+### 📋 Task Management
+- **CRUD** operations (Create, Read, Update, Delete)
+- Fields: `title`, `description`, `due_date`, `status`, `priority`
+- Status: Pending, In Progress, Completed
+- Priority: Low, Medium, High
+- Filter by status, priority, due date
+- Search by title or description
+- **Paginated** task listings
 
-Tasks include title, description, due_date, status (Pending, In Progress, Completed), and priority (Low, Medium, High).
+### 📊 Dashboard Overview
+- Task Summary: Total, Pending, Completed
+- Last 5 activity logs
+- Overdue task counter
 
-Filtering by status, priority, and due date (Before/After Today).
+---
 
-Search tasks by title or description.
+## 🛠 Technical Requirements
 
-Pagination for task listing.
+### UI & Components
+- Views: **Blade**
+- Styling: **Tailwind CSS** (or Bootstrap 5)
+- Use Blade Components for:
+  - Task cards
+  - Alerts
+  - Layout
 
-Dashboard:
+### 📜 Activity Logs
+- Table: `task_activity_logs`
+- Tracked Actions: Create, Update, Delete, Status Changes
+- Fields: `task_id`, `action`, `user_id`, `timestamp`, `description`
+- View logs on task detail page
 
-Displays a task summary: total, pending, completed
+### ⏰ Reminders via Queued Jobs
+- Email reminders sent **1 day before `due_date`**
+- Use `database` queue driver
+- **Scheduled job**: `TaskReminderJob`
 
-Shows the last 5 recent activity logs.
+### 🧰 Custom Artisan Command
+```bash
+php artisan tasks:send-reminders
+````
 
-Counts overdue tasks.
+* Finds tasks due tomorrow (not completed)
+* Dispatches `TaskReminderJob`
+* Logs summary of actions taken
 
-Technical Requirements
-Blade + Tailwind UI:
+---
 
-Use Laravel Blade for views.
+## 🗄 Database Requirements
 
-Use Tailwind CSS (preferred) or Bootstrap 5.
+* Use **migrations**, **seeders**, and **factories**
+* Relationships:
 
-Use Blade Components for reusable elements like task card, alerts, etc.
+  * `User` ➝ hasMany ➝ `Task`
+  * `Task` ➝ hasMany ➝ `TaskActivityLog`
 
-Activity Logs:
+---
 
-Create a task_activity_logs table.
+## ⚙️ Setup Instructions
 
-Track key changes: create, update, delete, status changes.
+### 1️⃣ Obtain the Project Code
 
-Each log should contain: task_id, action, user_id, timestamp, description.
+#### • Clone the Repository (Recommended):
 
-Display log history on the task detail page.
-
-Reminders via Queued Jobs:
-
-Implement a queue job to send email reminders 1 day before task due_date.
-
-Use database queue driver.
-
-Schedule the job using TaskReminderJob, dispatched via a daily scheduled command.
-
-Custom Artisan Console Command:
-
-Create a command: php artisan tasks:send-reminders
-
-Finds tasks due tomorrow with status ≠ Completed.
-
-Dispatches TaskReminderJob for each matching task.
-
-Logs summary: tasks found, emails dispatched.
-
-Database Requirements
-Use migrations, seeders, and factories.
-
-Eloquent relationships:
-
-User → hasMany Task
-
-Task → hasMany TaskActivityLog
-
-Setup Instructions
-Obtain the Project Code:
-You can get the project code in one of two ways:
-
-Clone the Repository (Recommended):
-
+```bash
 git clone <your-repo-url> task-manager
 cd task-manager
+```
+Or
+#### • Download as ZIP:
 
-(Replace <your-repo-url> with the actual URL of this GitHub/GitLab repository.)
+* Download the project as a `.zip` from the repository.
+* Extract it and rename the folder to `task-manager` (if needed):
 
-Download as ZIP:
-Download the project as a .zip file from the repository page and extract it to your desired location. Rename the extracted folder to task-manager if it's not already. Then navigate into the directory:
-
+```bash
 cd path/to/your/task-manager
+```
 
-Install PHP Dependencies:
-If you cloned or downloaded the project, you need to install its PHP dependencies:
+---
 
+### 2️⃣ Install PHP Dependencies
+
+```bash
 composer install
+```
 
-Install Laravel Breeze (for Authentication & Tailwind CSS):
-(This step is only needed if you are setting up a fresh Laravel project and copying files, or if Breeze wasn't included in the initial clone/download. If you cloned this completed project, Breeze's dependencies should be handled by composer install.)
+---
 
+### 3️⃣ Install Laravel Breeze (if not already included)
+
+```bash
 composer require laravel/breeze --dev
-php artisan breeze:install blade # Choose Blade for UI
+php artisan breeze:install blade
 npm install && npm run dev
+```
 
-Copy .env.example to .env:
+---
 
+### 4️⃣ Copy `.env.example` to `.env`
+
+```bash
 cp .env.example .env
+```
 
-Generate application key:
+---
 
+### 5️⃣ Generate Application Key
+
+```bash
 php artisan key:generate
+```
 
-Configure your database in .env:
-Update the database connection details in your .env file:
+---
 
+### 6️⃣ Configure Database in `.env`
+
+```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=task_manager_db
 DB_USERNAME=root
 DB_PASSWORD=
+```
 
-(Ensure DB_DATABASE matches the name of the database you will create.)
+*(Make sure the database exists with the correct credentials.)*
 
-Manually Create the Database:
-Before running migrations, you need to manually create an empty database named task_manager_db in your MySQL server (e.g., via phpMyAdmin, MySQL Workbench, or command line).
+---
 
-Run database migrations and seeders:
+### 7️⃣ Manually Create the Database
 
+* Use phpMyAdmin, MySQL CLI, or any GUI tool to create a database named:
+
+```
+task_manager_db
+```
+
+---
+
+### 8️⃣ Run Migrations & Seeders
+
+```bash
 php artisan migrate:fresh --seed
+```
 
-This will create the necessary tables and seed the database with:
+Creates:
 
-Admin User: admin@example.com / password
+* **Admin User:** `admin@example.com` / `password`
+* **Regular User:** `user@example.com` / `password`
+* Sample tasks for both users
 
-Regular User: user@example.com / password
+---
 
-Sample tasks for both users.
+### 9️⃣ Configure Queue Driver
 
-Configure Queue Driver:
-Ensure QUEUE_CONNECTION=database in your .env file for queued jobs to work.
+Ensure in your `.env`:
 
-Run Queue Listener (in a separate terminal):
+```env
+QUEUE_CONNECTION=database
+```
 
+---
+
+### 🔟 Run Queue Listener (in separate terminal)
+
+```bash
 php artisan queue:work
+```
 
-(This command will typically show a blinking cursor, indicating it's listening for jobs. Keep this terminal open.)
+*(Keep this terminal open while testing queued jobs.)*
 
-Start the Laravel Development Server:
-Open another terminal window and navigate to your project directory.
+---
 
+### 1️⃣1️⃣ Start the Laravel Development Server
+
+```bash
 php artisan serve
+```
 
-(This will start the web server, usually accessible at http://127.0.0.1:8000.)
+Visit: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-Schedule Command (for reminders - Optional for local testing):
-For automated daily reminders in a production environment, add the following to your system's cron job (Linux/macOS) or Task Scheduler (Windows):
+---
 
+### 1️⃣2️⃣ Schedule Command (for automated reminders)
+
+For production Cron job:
+
+```bash
 * * * * * cd /path/to/your-project && php artisan schedule:run >> /dev/null 2>&1
+```
 
-(For local testing, you can manually run php artisan tasks:send-reminders in a separate terminal to dispatch reminder jobs.)
+For manual testing:
 
-Job Queue and Command Usage
-Sending Reminders Manually:
-To manually trigger the reminder dispatch, run the custom Artisan command:
-
+```bash
 php artisan tasks:send-reminders
+```
 
-This command will find tasks due tomorrow (not completed) and add TaskReminderJob to the queue.
+---
 
-Processing Queued Jobs:
-Ensure your queue worker is running:
+## 📨 Job Queue Usage
 
+### • Manually Trigger Reminders
+
+```bash
+php artisan tasks:send-reminders
+```
+
+### • Process Jobs
+
+```bash
 php artisan queue:work
+```
 
-The TaskReminderJob will be processed by the worker, and a simulated email reminder will be logged to storage/logs/laravel.log.
+* Simulated emails will be logged in:
+
+```
+storage/logs/laravel.log
+```
+
+---
+
+## 📎 License
+
+This project is open-source and free to use for educational and personal projects.
+
+---
+
+**Happy Building! 🧱🚀**
