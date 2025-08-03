@@ -1,61 +1,180 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Task Manager with Reminders & Activity Logs
+This is a Laravel 10+ web application for managing tasks, complete with user authentication, activity logging, and email reminders via queued jobs.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Features
+Authentication & Roles:
 
-## About Laravel
+Built with Laravel Breeze for secure login/registration.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Supports two roles: Admin and User.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Admins can view all users and their tasks.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Users can only manage their own tasks.
 
-## Learning Laravel
+Task Management:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+CRUD operations for tasks (Create, Read, Update, Delete).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Tasks include title, description, due_date, status (Pending, In Progress, Completed), and priority (Low, Medium, High).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Filtering by status, priority, and due date (Before/After Today).
 
-## Laravel Sponsors
+Search tasks by title or description.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Pagination for task listing.
 
-### Premium Partners
+Dashboard:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Displays a task summary: total, pending, completed
 
-## Contributing
+Shows the last 5 recent activity logs.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Counts overdue tasks.
 
-## Code of Conduct
+Technical Requirements
+Blade + Tailwind UI:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Use Laravel Blade for views.
 
-## Security Vulnerabilities
+Use Tailwind CSS (preferred) or Bootstrap 5.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Use Blade Components for reusable elements like task card, alerts, etc.
 
-## License
+Activity Logs:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Create a task_activity_logs table.
+
+Track key changes: create, update, delete, status changes.
+
+Each log should contain: task_id, action, user_id, timestamp, description.
+
+Display log history on the task detail page.
+
+Reminders via Queued Jobs:
+
+Implement a queue job to send email reminders 1 day before task due_date.
+
+Use database queue driver.
+
+Schedule the job using TaskReminderJob, dispatched via a daily scheduled command.
+
+Custom Artisan Console Command:
+
+Create a command: php artisan tasks:send-reminders
+
+Finds tasks due tomorrow with status ≠ Completed.
+
+Dispatches TaskReminderJob for each matching task.
+
+Logs summary: tasks found, emails dispatched.
+
+Database Requirements
+Use migrations, seeders, and factories.
+
+Eloquent relationships:
+
+User → hasMany Task
+
+Task → hasMany TaskActivityLog
+
+Setup Instructions
+Obtain the Project Code:
+You can get the project code in one of two ways:
+
+Clone the Repository (Recommended):
+
+git clone <your-repo-url> task-manager
+cd task-manager
+
+(Replace <your-repo-url> with the actual URL of this GitHub/GitLab repository.)
+
+Download as ZIP:
+Download the project as a .zip file from the repository page and extract it to your desired location. Rename the extracted folder to task-manager if it's not already. Then navigate into the directory:
+
+cd path/to/your/task-manager
+
+Install PHP Dependencies:
+If you cloned or downloaded the project, you need to install its PHP dependencies:
+
+composer install
+
+Install Laravel Breeze (for Authentication & Tailwind CSS):
+(This step is only needed if you are setting up a fresh Laravel project and copying files, or if Breeze wasn't included in the initial clone/download. If you cloned this completed project, Breeze's dependencies should be handled by composer install.)
+
+composer require laravel/breeze --dev
+php artisan breeze:install blade # Choose Blade for UI
+npm install && npm run dev
+
+Copy .env.example to .env:
+
+cp .env.example .env
+
+Generate application key:
+
+php artisan key:generate
+
+Configure your database in .env:
+Update the database connection details in your .env file:
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=task_manager_db
+DB_USERNAME=root
+DB_PASSWORD=
+
+(Ensure DB_DATABASE matches the name of the database you will create.)
+
+Manually Create the Database:
+Before running migrations, you need to manually create an empty database named task_manager_db in your MySQL server (e.g., via phpMyAdmin, MySQL Workbench, or command line).
+
+Run database migrations and seeders:
+
+php artisan migrate:fresh --seed
+
+This will create the necessary tables and seed the database with:
+
+Admin User: admin@example.com / password
+
+Regular User: user@example.com / password
+
+Sample tasks for both users.
+
+Configure Queue Driver:
+Ensure QUEUE_CONNECTION=database in your .env file for queued jobs to work.
+
+Run Queue Listener (in a separate terminal):
+
+php artisan queue:work
+
+(This command will typically show a blinking cursor, indicating it's listening for jobs. Keep this terminal open.)
+
+Start the Laravel Development Server:
+Open another terminal window and navigate to your project directory.
+
+php artisan serve
+
+(This will start the web server, usually accessible at http://127.0.0.1:8000.)
+
+Schedule Command (for reminders - Optional for local testing):
+For automated daily reminders in a production environment, add the following to your system's cron job (Linux/macOS) or Task Scheduler (Windows):
+
+* * * * * cd /path/to/your-project && php artisan schedule:run >> /dev/null 2>&1
+
+(For local testing, you can manually run php artisan tasks:send-reminders in a separate terminal to dispatch reminder jobs.)
+
+Job Queue and Command Usage
+Sending Reminders Manually:
+To manually trigger the reminder dispatch, run the custom Artisan command:
+
+php artisan tasks:send-reminders
+
+This command will find tasks due tomorrow (not completed) and add TaskReminderJob to the queue.
+
+Processing Queued Jobs:
+Ensure your queue worker is running:
+
+php artisan queue:work
+
+The TaskReminderJob will be processed by the worker, and a simulated email reminder will be logged to storage/logs/laravel.log.
