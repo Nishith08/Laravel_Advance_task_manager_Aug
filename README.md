@@ -1,11 +1,8 @@
-Here’s your complete and beautifully **formatted `README.md`** file with the newly added **"Setup Instructions"** section from Canvas, integrated in a professional and clean layout:
-
----
 
 ````markdown
 # ✅ Task Manager with Reminders & Activity Logs
 
-A Laravel 10+ web application to manage tasks with user authentication, activity logs, and email reminders using queued jobs.
+A Laravel 10+ (Laravel Framework 12.21.0) web application to manage tasks with user authentication, activity logs, and email reminders using queued jobs.
 
 ---
 
