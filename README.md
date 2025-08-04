@@ -102,11 +102,9 @@ composer install
 
 ---
 
-### 3️⃣ Install Laravel Breeze (if not already included)
+### 3️⃣ Install vite
 
 ```bash
-composer require laravel/breeze --dev
-php artisan breeze:install blade
 npm install && npm run dev
 ```
 
